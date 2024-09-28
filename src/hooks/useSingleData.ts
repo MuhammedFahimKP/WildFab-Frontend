@@ -30,7 +30,8 @@ const useSingleData = <T>(
           })
           .catch((error: ApiClientError) => {
             setError(error.message);
-          });
+          })
+          .finally(() => setIsLoading(false));
       }, delay);
 
       return () => controler.abort();

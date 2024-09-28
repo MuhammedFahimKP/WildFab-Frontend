@@ -44,7 +44,7 @@ const Category = () => {
 
         return newParams;
       });
-    }, 2000);
+    }, 500);
   };
 
   return (

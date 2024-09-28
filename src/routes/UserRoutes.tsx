@@ -1,21 +1,18 @@
-import { lazy, type ComponentType, type LazyExoticComponent } from "react";
+import {
+  lazy,
+  Suspense,
+  type ComponentType,
+  type LazyExoticComponent,
+} from "react";
 import { createBrowserRouter } from "react-router-dom";
 
+import Home from "@/pages/user/Home.tsx";
 import Suspensed from "./Suspensed.tsx";
-import NewCheckout from "../pages/user/NewCheckout.tsx";
 import NotFound from "../components/NotFound";
-import Orders from "../pages/user/Orders.tsx";
-import Accounts from "../pages/user/Accounts.tsx";
-import ProfileSettings from "../pages/user/ProfileSettings.tsx";
-import Cart from "../pages/user/Cart.tsx";
-import ShopPage from "../pages/user/ShopPage.tsx";
-import OrderHistory from "../pages/user/OrderHistory.tsx";
-import SingleOrderPage from "../pages/user/SingleOrderPage.tsx";
-import Address from "../pages/user/Address.tsx";
 
 export function lazyImport<T extends ComponentType<any>>(
   importFn: () => Promise<{ default: T }>,
-  defaultDelay: number = 2000
+  defaultDelay: number = 1000
 ): LazyExoticComponent<T> {
   return lazy(() => {
     return new Promise((resolve) => {
@@ -26,13 +23,20 @@ export function lazyImport<T extends ComponentType<any>>(
   });
 }
 
-const Home = lazyImport(() => import("../pages/user/Home.tsx"));
 const Shop = lazyImport(() => import("../pages/user/Shop.tsx"));
 const SignUp = lazyImport(() => import("../pages/user/SignUp"));
 const Socket = lazyImport(() => import("../components/Socket.tsx"));
 const NewSignin = lazyImport(() => import("../components/user/NewSignin.tsx"));
 const Colors = lazyImport(() => import("../components/Colors.tsx"));
 const WishList = lazyImport(() => import("../pages/user/WishList.tsx"));
+const NewCheckout = lazyImport(() => import("@/pages/user/NewCheckout.tsx"));
+const Accounts = lazyImport(() => import("@/pages/user/Accounts.tsx"));
+const Cart = lazyImport(() => import("@/pages/user/Cart.tsx"));
+const ShopPage = lazyImport(() => import("@/pages/user/ShopPage.tsx"));
+const OrderHistory = lazyImport(() => import("@/pages/user/OrderHistory.tsx"));
+const SingleOrderPage = lazyImport(
+  () => import("@/pages/user/SingleOrderPage.tsx")
+);
 
 const SingleProduct = lazyImport(
   () => import("../pages/user/SingleProduct.tsx")
@@ -46,18 +50,42 @@ const ProductDetailPage = lazyImport(
 
 const Checkout = lazyImport(() => import("../pages/user/Checkout.tsx"));
 
+const Orders = lazy(() => import("@/pages/user/Orders.tsx"));
+
+const Address = lazy(() => import("@/pages/user/Address.tsx"));
+const ProfileSettings = lazy(() => import("@/pages/user/ProfileSettings.tsx"));
+
 const routePatterns = [
   {
-    path: "shop-page/",
-    element: <ShopPage />,
+    path: "/",
+
+    element: <Home />,
   },
+
+  {
+    path: "shop-page/",
+    element: (
+      <Suspensed>
+        <ShopPage />
+      </Suspensed>
+    ),
+  },
+
   {
     path: "order/",
-    element: <SingleOrderPage />,
+    element: (
+      <Suspensed>
+        <SingleOrderPage />
+      </Suspensed>
+    ),
   },
   {
     path: "orderHistory",
-    element: <OrderHistory />,
+    element: (
+      <Suspensed>
+        <OrderHistory />
+      </Suspensed>
+    ),
   },
 
   {
@@ -70,20 +98,36 @@ const routePatterns = [
   },
   {
     path: "account/",
-    element: <Accounts />,
+    element: (
+      <Suspensed>
+        <Accounts />
+      </Suspensed>
+    ),
     children: [
       {
         path: "orders/",
-        element: <Orders />,
+        element: (
+          <Suspense>
+            <Orders />
+          </Suspense>
+        ),
       },
       {},
       {
         path: "profile/",
-        element: <ProfileSettings />,
+        element: (
+          <Suspense>
+            <ProfileSettings />
+          </Suspense>
+        ),
       },
       {
         path: "address/",
-        element: <Address />,
+        element: (
+          <Suspense>
+            <Address />
+          </Suspense>
+        ),
       },
     ],
   },
@@ -175,11 +219,19 @@ const routePatterns = [
 
   {
     path: "check/",
-    element: <NewCheckout />,
+    element: (
+      <Suspensed>
+        <NewCheckout />
+      </Suspensed>
+    ),
   },
   {
     path: "cart/",
-    element: <Cart />,
+    element: (
+      <Suspensed>
+        <Cart />
+      </Suspensed>
+    ),
   },
 ];
 

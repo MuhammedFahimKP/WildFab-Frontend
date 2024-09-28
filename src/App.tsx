@@ -8,10 +8,11 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ToastContextProvider } from "./context";
 
 export default function App() {
+  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_ID;
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={false}>
-        <GoogleOAuthProvider clientId="296061655793-btom7bmad6ugdt93200u7j3uk22ijevl.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
           <ToastContextProvider>
             <RouteWrapper />
           </ToastContextProvider>

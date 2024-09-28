@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 
 import { ShippingAddress } from "../../@types";
 import ShippingAddressShow from "../../components/user/ShippingAddressShow";
@@ -7,15 +7,31 @@ import { makeArrayFromRange } from "../../utils/other-utils";
 import { useData } from "../../hooks";
 import ShippingAddressCreateForm from "../../components/user/ShippingAddressCreateForm";
 import { LuPlus } from "react-icons/lu";
+import ShippingAddressEditForm from "../../components/user/ShippingAddressEditForm";
 
 const Address = () => {
-  const { data, isLoading, setData } = useData<ShippingAddress>(
+  const { data, isLoading, error, setData } = useData<ShippingAddress>(
     "users/shipping-address/",
-    6000
+    1000
   );
 
   const [showForm, setShowForm] = useState(false);
+
+  const [editItem, setEditItem] = useState<string | null>(null);
+
   const loadingArray = makeArrayFromRange(6);
+
+  const addEdit = (item: string) => {
+    setEditItem(item);
+  };
+
+  const removeEdit = () => {
+    setEditItem(null);
+  };
+
+  const handleEdit = (item: string) => {
+    editItem !== item ? addEdit(item) : removeEdit();
+  };
 
   return (
     <div className="w-full lg:w-3/4">
@@ -36,32 +52,8 @@ const Address = () => {
                 key={"account-address-skeleton-" + value}
               />
             ))}
-          {data.map(
-            ({
-              alter_phone_no,
-              city,
-              id,
-              landmark,
-              phone_no,
-              pin_code,
-              place,
-              state,
-            }: ShippingAddress) => (
-              <ShippingAddressShow
-                alter_phone_no={alter_phone_no}
-                city={city}
-                id={id}
-                landmark={landmark}
-                phone_no={phone_no}
-                pin_code={pin_code}
-                place={place}
-                state={state}
-                key={id}
-              />
-            )
-          )}
 
-          {!isLoading && (
+          {!isLoading && error === null && (
             <div className="">
               <button
                 onClick={() => {
@@ -77,6 +69,41 @@ const Address = () => {
                 </p>
               </button>
             </div>
+          )}
+
+          {data.map(
+            ({
+              alter_phone_no,
+              city,
+              id,
+              landmark,
+              phone_no,
+              pin_code,
+              place,
+              state,
+            }: ShippingAddress) => (
+              <Fragment key={id}>
+                <ShippingAddressShow
+                  alter_phone_no={alter_phone_no}
+                  city={city}
+                  id={id}
+                  onEditClick={() => handleEdit(id)}
+                  landmark={landmark}
+                  phone_no={phone_no}
+                  pin_code={pin_code}
+                  place={place}
+                  state={state}
+                />
+                {editItem === id && (
+                  <ShippingAddressEditForm
+                    handleOpen={() => handleEdit(id)}
+                    id={id}
+                    open={editItem === id}
+                    setShippingAddress={setData}
+                  />
+                )}
+              </Fragment>
+            )
           )}
         </div>
 

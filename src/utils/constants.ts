@@ -61,7 +61,7 @@ const FILE_REQUEST_CONFIG = {
   },
 };
 
-const DELIVERY_AVAILABLE_STATES = ["Kerala", "TamilNadu", "Karanataka"];
+const DELIVERY_AVAILABLE_STATES = ["Kerala", "TamilNadu", "Karnataka"];
 
 export {
   VALID_FILE_EXTENTIONS,

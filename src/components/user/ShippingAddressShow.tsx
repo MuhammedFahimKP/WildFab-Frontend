@@ -1,5 +1,9 @@
-import { ShippingAddress as Props } from "../../@types";
+import { ShippingAddress } from "../../@types";
 import { GoPencil } from "react-icons/go";
+
+interface Props extends ShippingAddress {
+  onEditClick: () => void;
+}
 
 const ShippingAddressShow = ({
   alter_phone_no,
@@ -8,11 +12,16 @@ const ShippingAddressShow = ({
   phone_no,
   pin_code,
   state,
+  onEditClick,
+
   place,
 }: Props) => {
   return (
     <div className="flex relative items-start rounded-lg border-2 border-gray-200 shadow-lg p-4">
-      <button className="bg-white absolute right-4 underline text-black text-sm  flex items-center gap-2">
+      <button
+        onClick={() => onEditClick()}
+        className="bg-white absolute right-4 underline text-black text-sm  flex items-center gap-2"
+      >
         <GoPencil className=" text-gray-400" /> Edit
       </button>
 

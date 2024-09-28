@@ -1,13 +1,6 @@
 import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
-import AddVaraitonPage from "../pages/admin/AddVaraitonPage";
-import EditProduct from "../pages/admin/EditProduct";
-import ProductViewPage from "../pages/admin/ProductViewPage";
-import VariationViewPage from "../pages/admin/VariationViewPage";
-import CreateProduct from "../pages/admin/CreateProduct.tsx";
-import Orders from "../pages/admin/Orders.tsx";
-import SingleOrderView from "../pages/admin/SingleOrderView.tsx";
 import { NotFoundProvider } from "../context";
 
 const AdminHome = lazy(() => import("../pages/admin/Home.tsx"));
@@ -17,6 +10,18 @@ const Category = lazy(() => import("../pages/admin/Category.tsx"));
 const Color = lazy(() => import("../pages/admin/Color.tsx"));
 const Size = lazy(() => import("../pages/admin/Size.tsx"));
 const User = lazy(() => import("../pages/admin/User.tsx"));
+
+const AddVaraitonPage = lazy(
+  () => import("../pages/admin/AddVaraitonPage.tsx")
+);
+const EditProduct = lazy(() => import("@/pages/admin/EditProduct.tsx"));
+const ProductViewPage = lazy(() => import("@/pages/admin/ProductViewPage.tsx"));
+const VariationViewPage = lazy(
+  () => import("@/pages/admin/VariationViewPage.tsx")
+);
+const CreateProduct = lazy(() => import("@/pages/admin/CreateProduct.tsx"));
+const Orders = lazy(() => import("@/pages/admin/Orders.tsx"));
+const SingleOrderView = lazy(() => import("@/pages/admin/SingleOrderView.tsx"));
 
 // Routs
 const routes: RouteObject[] = [
@@ -39,23 +44,68 @@ const routes: RouteObject[] = [
           </Suspense>
         ),
         children: [
-          { path: "add/", element: <CreateProduct /> },
+          {
+            path: "add/",
+            element: (
+              <Suspense>
+                <CreateProduct />
+              </Suspense>
+            ),
+          },
           {
             path: "view/:id/",
-            element: <ProductViewPage />,
+            element: (
+              <Suspense>
+                <ProductViewPage />
+              </Suspense>
+            ),
           },
-          { path: "edit/:id", element: <EditProduct /> },
+          {
+            path: "edit/:id",
+            element: (
+              <Suspense>
+                <EditProduct />
+              </Suspense>
+            ),
+          },
 
-          { path: "varaition/:varid/", element: <VariationViewPage /> },
+          {
+            path: "varaition/:varid/",
+            element: (
+              <Suspense>
+                <VariationViewPage />
+              </Suspense>
+            ),
+          },
 
-          { path: "variation/:pid/add/", element: <AddVaraitonPage /> },
+          {
+            path: "variation/:pid/add/",
+            element: (
+              <Suspense>
+                <AddVaraitonPage />
+              </Suspense>
+            ),
+          },
         ],
       },
       {
         path: "orders/",
-        element: <Orders />,
+        element: (
+          <Suspense>
+            <Orders />
+          </Suspense>
+        ),
 
-        children: [{ path: ":id/", element: <SingleOrderView /> }],
+        children: [
+          {
+            path: ":id/",
+            element: (
+              <Suspense>
+                <SingleOrderView />
+              </Suspense>
+            ),
+          },
+        ],
       },
       {
         path: "brand/",

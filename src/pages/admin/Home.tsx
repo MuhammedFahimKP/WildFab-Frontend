@@ -1,16 +1,13 @@
-import { useContext } from "react";
+import { useContext, lazy, Suspense } from "react";
 import { useOutlet } from "react-router-dom";
 import { NotFoundContext } from "../../context";
 
-import DashBoard from "../../components/admin/DashBoard";
-
-import SideBar from "../../components/admin/SideBar";
 import ScreenContainer from "../../ui/user/ScreenContainer";
-import Navbar from "../../components/admin/Navbar";
 
-import NotFound from "../../components/NotFound";
-
-import LoaderWithoutBg from "../../components/user/LoaderWithoutBg";
+const Navbar = lazy(() => import("@/components/admin/Navbar"));
+const SideBar = lazy(() => import("@/components/admin/SideBar"));
+const DashBoard = lazy(() => import("@/components/admin/DashBoard"));
+const PageNotFound = lazy(() => import("@/components/NotFound"));
 
 function Home() {
   const outlet = useOutlet();
@@ -20,15 +17,25 @@ function Home() {
   return (
     <ScreenContainer>
       {notFound?.notFoundItem ? (
-        <NotFound />
+        <Suspense>
+          <PageNotFound />
+        </Suspense>
       ) : (
         <>
-          <Navbar />
+          <Suspense>
+            <Navbar />
+          </Suspense>
 
           <div className="flex font-roboto">
             <SideBar />
             <div className="lg:ml-64 w-full mt-20 overflow-hidden">
-              {outlet ? outlet : <DashBoard />}
+              {outlet ? (
+                outlet
+              ) : (
+                <Suspense>
+                  <DashBoard />
+                </Suspense>
+              )}
             </div>
           </div>
         </>

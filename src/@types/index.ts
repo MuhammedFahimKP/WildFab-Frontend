@@ -7,7 +7,8 @@ export type AuthState =
   | "NOT LOGGED"
   | "TIMED OUT"
   | "FORGET PASS"
-  | "LOGED IN";
+  | "LOGED IN"
+  | "EMAIL CHANGED";
 
 export type UserAuthType = "google" | "email";
 
